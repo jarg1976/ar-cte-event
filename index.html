@@ -3,8 +3,12 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Teste Marker</title>
-  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <title>Teste AR.js (compatível)</title>
+
+  <!-- AFRAME 1.0.4 (compatível com AR.js 2.2.1) -->
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+
+  <!-- AR.js (aframe build) -->
   <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.2.1/aframe/build/aframe-ar.js"></script>
 </head>
 
@@ -17,8 +21,13 @@
   </a-scene>
 
   <script>
-    document.querySelector('#marker').addEventListener('markerFound', () => console.log('markerFound'));
-    document.querySelector('#marker').addEventListener('markerLost', () => console.log('markerLost'));
+    // espera pela cena A-Frame estar carregada
+    document.querySelector('#scene').addEventListener('loaded', () => {
+      console.log('a-scene loaded — agora é seguro aceder aos elementos');
+      const marker = document.querySelector('#marker');
+      marker.addEventListener('markerFound', () => console.log('markerFound'));
+      marker.addEventListener('markerLost', () => console.log('markerLost'));
+    });
   </script>
 </body>
 
