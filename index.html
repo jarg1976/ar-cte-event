@@ -1,32 +1,61 @@
-<!doctype html>
-<html>
-
 <head>
   <meta charset="utf-8">
-  <title>Teste AR.js (compatível)</title>
+  <title>AR.js + A-Frame (compatível)</title>
 
-  <!-- AFRAME 1.0.4 (compatível com AR.js 2.2.1) -->
+  <!-- A-Frame 1.0.4 -->
   <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
 
   <!-- AR.js (aframe build) -->
   <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.2.1/aframe/build/aframe-ar.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #info {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 6px 10px;
+      font-family: sans-serif;
+      z-index: 5;
+      border-radius: 4px;
+    }
+  </style>
 </head>
 
-<body style="margin:0; overflow:hidden;">
-  <a-scene embedded arjs="sourceType: webcam; trackingMethod: best; debugUIEnabled: true;">
-    <a-marker type="pattern" url="marker.patt" id="marker">
-      <a-box position="0 0.5 0" color="#4CC3D9"></a-box>
-    </a-marker>
+<body>
+  <div id="info">Aponta a câmara ao marker HIRO (imprime HIRO.jpg)</div>
+
+  <a-scene embedded arjs='trackingMethod: best; sourceType: webcam;' id="scene">
+    <a-scene embedded arjs="sourceType: webcam; trackingMethod: best; debugUIEnabled: true;">
+      <a-marker type="pattern" url="marker.patt" id="marker">
+        <a-box position="0 0.5 0" color="#4CC3D9"></a-box>
+      </a-marker>
+
+    <!-- câmera -->
     <a-entity camera></a-entity>
   </a-scene>
 
   <script>
-    // espera pela cena A-Frame estar carregada
+    // Espera a cena carregar antes de mexer em elementos
     document.querySelector('#scene').addEventListener('loaded', () => {
-      console.log('a-scene loaded — agora é seguro aceder aos elementos');
+      console.log('a-scene loaded — pronto para AR');
+
       const marker = document.querySelector('#marker');
-      marker.addEventListener('markerFound', () => console.log('markerFound'));
-      marker.addEventListener('markerLost', () => console.log('markerLost'));
+      marker.addEventListener('markerFound', () => {
+        console.log('markerFound');
+        document.getElementById('info').innerText = 'Marker detectado — cubo visível';
+      });
+
+      marker.addEventListener('markerLost', () => {
+        console.log('markerLost');
+        document.getElementById('info').innerText = 'Aponta a câmara ao marker HIRO (imprime HIRO.jpg)';
+      });
     });
   </script>
 </body>
